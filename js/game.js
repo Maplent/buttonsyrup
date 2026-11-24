@@ -44,6 +44,10 @@ const S = {stage: 0, presses: 0, started: Date.now(), lastAct: Date.now(), ended
 let typer = 0;
 function say(text, mood) {
     if (mood) setMood(mood);
+    const bubble = $('.bubble');
+    bubble.classList.remove('pop');
+    void bubble.offsetWidth;
+    bubble.classList.add('pop');
     $('#srLine').textContent = text;
     const el = $('#line');
     clearInterval(typer);
@@ -104,6 +108,9 @@ function hit() {
     S.lastAct = Date.now();
     renderMeta();
     sfx.press(); squish(); burst('drop', 7); shake(); buzz(25);
+    bottle.classList.remove('flinch');
+    void bottle.offsetWidth;
+    bottle.classList.add('flinch');
 }
 
 function place(x, y, s = 1) {

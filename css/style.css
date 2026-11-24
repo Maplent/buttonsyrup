@@ -90,6 +90,18 @@ button {
   cursor: pointer;
 }
 
+.mute:hover {
+  background: #fff;
+}
+
+.mute:active {
+  transform: translateY(2px);
+}
+
+::selection {
+  background: var(--pink);
+}
+
 .stage {
   position: relative;
   overflow: hidden;
@@ -151,6 +163,12 @@ button {
   width: 100%;
   height: 100%;
   overflow: visible;
+  transform-origin: 50% 100%;
+}
+
+/* bottle flinch, poor guy ;D */
+.bottle.flinch svg {
+  animation: flinch .3s;
 }
 
 .o {
@@ -245,6 +263,10 @@ button {
 
 .bubble p {
   margin: 0;
+}
+
+.bubble.pop {
+    animation: pop .25s;
 }
 
 #extras {
@@ -498,6 +520,7 @@ button {
   position: absolute;
   inset: 0;
   background: linear-gradient(var(--syrup), var(--syrup2));
+  overflow: hidden;
 }
 
 .syrup svg {
@@ -507,6 +530,18 @@ button {
   width: 200%;
   height: 20px;
   animation: wave 6s linear infinite;
+}
+
+/* syrup fizz, its not soda but shhh */
+.fizz {
+  position: absolute;
+  bottom: -12px;
+  left: var(--x);
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--syrup3);
+  border-radius: 50%;
+  animation: fizz 4s var(--d) ease-in infinite;
 }
 
 .glint {
@@ -658,6 +693,19 @@ button {
   75% { transform: translate(-3px, -1px); }
 }
 
+@keyframes flinch {
+  30% { transform: scale(1.08, .92); }
+  60% { transform: scale(.96, 1.05); }
+}
+
+@keyframes pop {
+  40% { transform: scale(1.03) rotate(-.6deg); }
+}
+
+@keyframes fizz {
+  to { transform: translateY(-160px); opacity: 0; }
+}
+
 @media (max-width: 600px) {
   .bottle {
     height: clamp(96px, 20vh, 150px);
@@ -665,6 +713,13 @@ button {
 
   .meta {
     font-size: 16px;
+  }
+}
+
+/* button gets excited when u hover :3 */
+@media (hover: hover) {
+  .big:not(:disabled):not(.down):hover:not(:active) .cap {
+    transform: translateY(-3px);
   }
 }
 
