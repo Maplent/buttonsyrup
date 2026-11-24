@@ -1,0 +1,677 @@
+:root {
+  color-scheme: light;
+  --ink: #5b3a2e;
+  --wall: #ffeee8;
+  --wall2: #ffdcd4;
+  --cream: #fffaf3;
+  --pink: #ffb8c0;
+  --shadow: #f4c3bc;
+  --wood: #f0c29a;
+  --wood2: #f8d7b4;
+  --wood3: #dfa982;
+  --syrup: #f2aa52;
+  --syrup2: #db8d3a;
+  --syrup3: #ffd9a0;
+  --red: #ff5d6c;
+  --red2: #e03e52;
+  --red3: #ffb3bb;
+  --muted: #8a6a5c;
+  --size: clamp(92px, min(24vw, 26vh), 170px);
+}
+
+html, body {
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+  min-width: 0;
+}
+
+body {
+  margin: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  background: var(--wall);
+  color: var(--ink);
+  font: 700 18px/1.3 Gaegu, "Comic Sans MS", "Chalkboard SE", system-ui, sans-serif;
+  overflow: hidden;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+}
+
+.sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px 16px;
+  flex-wrap: wrap;
+  padding: 8px max(16px, 3vw);
+  background: var(--pink);
+  color: var(--ink);
+  border-bottom: 3px solid var(--ink);
+}
+
+.top h1 {
+  margin: 0;
+  font: 400 clamp(24px, 3.4vw, 34px)/1 "Mochiy Pop One", Gaegu, system-ui, sans-serif;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 8px 18px;
+  flex-wrap: wrap;
+}
+
+.meta span {
+  white-space: nowrap;
+}
+
+.mute {
+  min-height: 44px;
+  padding: 4px 14px;
+  border: 3px solid var(--ink);
+  border-radius: 12px;
+  background: var(--cream);
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.stage {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse at 50% -10%, #fff8f2, transparent 60%),
+    radial-gradient(circle at 28px 28px, var(--wall2) 0 5px, transparent 6px) 0 0 / 56px 56px,
+    var(--wall);
+}
+
+.counter {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 32%;
+  background: repeating-linear-gradient(90deg, var(--wood) 0 86px, var(--wood3) 86px 90px);
+  border-top: 3px solid var(--ink);
+}
+
+.counter::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 18px;
+  /* diner checkerboard strip */
+  background: conic-gradient(var(--pink) 25%, var(--cream) 0 50%, var(--pink) 0 75%, var(--cream) 0) 0 0 / 18px 18px;
+  border-bottom: 3px solid var(--ink);
+}
+
+.counter::after {
+  content: "";
+  position: absolute;
+  left: -10px;
+  right: -10px;
+  top: -26px;
+  height: 26px;
+  background: var(--wood2);
+  border: 3px solid var(--ink);
+  border-radius: 8px;
+  box-shadow: inset 0 6px 0 #fde6cf;
+}
+
+.bottle {
+  position: absolute;
+  left: max(10px, 4%);
+  bottom: calc(32% + 12px);
+  height: clamp(110px, 28vh, 220px);
+  aspect-ratio: 120/170;
+  z-index: 2;
+  transform-origin: 50% 100%;
+  animation: bob 3.2s ease-in-out infinite;
+  transition: bottom 2.4s cubic-bezier(.5, 0, .3, 1);
+}
+
+.bottle svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.o {
+  stroke: var(--ink);
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.fill-syrup { fill: var(--syrup); }
+.fill-syrup-dark { fill: var(--syrup2); }
+.fill-syrup-light { fill: var(--syrup3); }
+.fill-pink { fill: var(--pink); }
+.fill-cream { fill: var(--cream); }
+.fill-white { fill: #fff; }
+.fill-ink { fill: var(--ink); }
+
+.blush {
+  fill: #ff8fa0;
+  opacity: .7;
+}
+
+.label-big,
+.label-small {
+  fill: var(--ink);
+  text-anchor: middle;
+}
+
+.label-big {
+  font: 400 11px "Mochiy Pop One", sans-serif;
+}
+
+.label-small {
+  font: 700 11px Gaegu, sans-serif;
+}
+
+.eyes-squint,
+.eyes-happy {
+  display: none;
+}
+
+.bottle[data-mood=panic] .eyes-normal,
+.bottle[data-mood=happy] .eyes-normal {
+  display: none;
+}
+
+.bottle[data-mood=panic] .eyes-squint,
+.bottle[data-mood=happy] .eyes-happy {
+  display: inline;
+}
+
+.blink {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: blink 4.6s infinite;
+}
+
+.bottle.float {
+  bottom: 44%;
+  z-index: 6;
+  animation: floaty 2.6s ease-in-out infinite;
+}
+
+.bubble {
+  position: absolute;
+  top: clamp(12px, 3vh, 28px);
+  left: max(16px, 4%);
+  right: max(16px, 4%);
+  max-width: 600px;
+  min-height: calc(2.4em + 32px);
+  padding: 14px 20px;
+  background: var(--cream);
+  border: 3px solid var(--ink);
+  border-radius: 22px;
+  box-shadow: 0 6px 0 var(--shadow);
+  font-size: clamp(20px, 2.4vw, 27px);
+  line-height: 1.2;
+  z-index: 7;
+}
+
+.bubble::after {
+  content: "";
+  position: absolute;
+  left: clamp(30px, 7%, 64px);
+  bottom: -15px;
+  width: 24px;
+  height: 24px;
+  background: var(--cream);
+  border-right: 3px solid var(--ink);
+  border-bottom: 3px solid var(--ink);
+  transform: rotate(45deg);
+}
+
+.bubble p {
+  margin: 0;
+}
+
+#extras {
+  display: contents;
+}
+
+.spot {
+  position: absolute;
+  left: var(--x, 62%);
+  bottom: var(--y, calc(32% + 14px));
+  width: var(--size);
+  transform: translateX(-50%) scale(var(--s, 1));
+  transform-origin: 50% 100%;
+  transition: left .38s cubic-bezier(.3, 1.5, .5, 1), bottom .38s cubic-bezier(.3, 1.5, .5, 1), transform .45s cubic-bezier(.3, 1.6, .5, 1);
+  z-index: 3;
+}
+
+.big {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: calc(var(--size) * .78);
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+}
+
+.big::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 40%;
+  background: #fff3e6;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: inset 0 -7px 0 #f0d2b8;
+}
+
+.cap {
+  position: absolute;
+  left: 13%;
+  right: 13%;
+  bottom: 20%;
+  height: 66%;
+  background: var(--red);
+  border: 3px solid var(--ink);
+  border-radius: 50% 50% 46% 46%/60% 60% 40% 40%;
+  box-shadow: inset -8px -10px 0 var(--red2);
+  transform-origin: 50% 100%;
+  transition: transform .08s, box-shadow .08s;
+}
+
+.cap::after {
+  content: "";
+  position: absolute;
+  left: 20%;
+  top: 16%;
+  width: 24%;
+  height: 18%;
+  background: var(--red3);
+  border-radius: 50%;
+  transform: rotate(-20deg);
+}
+
+.big:active .cap, .big.down .cap {
+  transform: scaleY(.72);
+  box-shadow: inset -5px -5px 0 var(--red2);
+}
+
+.big:disabled {
+  cursor: default;
+}
+
+.flat .cap, .flat:active .cap {
+  background: #d9ccc4;
+  box-shadow: inset -6px -6px 0 #b8a69b;
+  transform: scaleY(.35);
+}
+
+.flat .cap::after {
+  display: none;
+}
+
+.big:focus-visible, .mute:focus-visible, .dome:focus-visible, .stack:focus-visible, .again:focus-visible {
+  outline: 4px dashed var(--ink);
+  outline-offset: 6px;
+  border-radius: 16px;
+}
+
+.badge {
+  position: absolute;
+  top: -14px;
+  right: -12px;
+  min-width: 44px;
+  height: 44px;
+  display: none;
+  place-items: center;
+  padding: 0 8px;
+  background: var(--cream);
+  border: 3px solid var(--ink);
+  border-radius: 22px;
+  font-size: 24px;
+  line-height: 1;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.spot[data-mode=dare] .badge {
+  display: grid;
+}
+
+.ring {
+  display: none;
+  position: absolute;
+  left: 50%;
+  bottom: calc(var(--size) * -.265);
+  width: 135%;
+  aspect-ratio: 1;
+  translate: -50% 0;
+  border-radius: 50%;
+  background: conic-gradient(var(--syrup2) calc(var(--p, 0) * 360deg), rgba(91, 58, 46, .12) 0);
+  -webkit-mask: radial-gradient(closest-side, transparent 84%, #000 85%);
+  mask: radial-gradient(closest-side, transparent 84%, #000 85%);
+  pointer-events: none;
+}
+
+.spot[data-mode=hold] .ring {
+  display: block;
+}
+
+.dome {
+  position: absolute;
+  left: -14%;
+  right: -14%;
+  bottom: 8%;
+  height: 112%;
+  padding: 0;
+  border: 3px solid var(--ink);
+  border-radius: 50% 50% 10px 10px/80% 80% 10px 10px;
+  background: linear-gradient(100deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, .6) 28%, rgba(255, 255, 255, .2) 44%, rgba(255, 255, 255, .32));
+  cursor: pointer;
+  z-index: 2;
+}
+
+.dome::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -22px;
+  width: 28px;
+  height: 20px;
+  translate: -50% 0;
+  background: var(--cream);
+  border: 3px solid var(--ink);
+  border-radius: 12px 12px 4px 4px;
+}
+
+.dome svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.dome path {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.dome.hit {
+  animation: wob .25s;
+}
+
+.dome.smash {
+  animation: smash .5s forwards;
+  pointer-events: none;
+}
+
+.stack {
+  position: absolute;
+  left: -15%;
+  right: -15%;
+  bottom: 6%;
+  height: 180%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.cake {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: calc(var(--size) * .26);
+  bottom: calc(var(--i) * var(--size) * .17);
+  background: #f7c27a;
+  border: 3px solid var(--ink);
+  border-radius: 50%;
+  box-shadow: inset 0 -7px 0 #e0a35a;
+  transform: rotate(var(--r));
+}
+
+.cake:last-child::after {
+  content: "";
+  position: absolute;
+  left: 40%;
+  top: -5px;
+  width: 20%;
+  height: 48%;
+  background: #fff1a6;
+  border: 3px solid var(--ink);
+  border-radius: 5px;
+}
+
+.cake.fly {
+  animation: fly .6s ease-in forwards;
+}
+
+.syrup {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--lvl, 5%);
+  z-index: 5;
+  pointer-events: none;
+  transition: height 1.1s cubic-bezier(.3, 1.3, .5, 1);
+}
+
+.stage.flooded .syrup {
+  height: 100%;
+  transition: height 2.4s cubic-bezier(.5, 0, .3, 1);
+}
+
+.syrup .body {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(var(--syrup), var(--syrup2));
+}
+
+.syrup svg {
+  position: absolute;
+  left: 0;
+  bottom: calc(100% - 2px);
+  width: 200%;
+  height: 20px;
+  animation: wave 6s linear infinite;
+}
+
+.glint {
+  position: absolute;
+  left: 8%;
+  top: 12px;
+  width: 22%;
+  height: 8px;
+  background: var(--syrup3);
+  border-radius: 8px;
+}
+
+.drop, .shard {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin: -8px;
+  background: var(--syrup);
+  border: 3px solid var(--ink);
+  border-radius: 50% 0 50% 50%;
+  z-index: 6;
+  pointer-events: none;
+  animation: drop .85s cubic-bezier(.2, .6, .4, 1) forwards;
+}
+
+.shard {
+  width: 13px;
+  height: 13px;
+  background: #eef7ff;
+  border-radius: 2px;
+}
+
+.shake {
+  animation: shake .28s;
+}
+
+.end {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 16px;
+  z-index: 8;
+}
+
+.end[hidden] {
+  display: none;
+}
+
+.card {
+  width: min(440px, 100%);
+  padding: 24px 26px;
+  background: var(--cream);
+  border: 3px solid var(--ink);
+  border-radius: 22px;
+  box-shadow: 0 8px 0 var(--shadow);
+}
+
+.card h2 {
+  margin: 0 0 8px;
+  font: 400 clamp(30px, 5vw, 42px)/1.05 "Mochiy Pop One", Gaegu, sans-serif;
+  text-wrap: balance;
+}
+
+.card p {
+  margin: 0 0 16px;
+  font-size: 21px;
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 26px;
+  margin: 0 0 20px;
+}
+
+.stats div {
+  display: grid;
+  gap: 4px;
+}
+
+.stats dt {
+  font-size: 17px;
+  color: var(--muted);
+}
+
+.stats dd {
+  margin: 0;
+  font: 400 30px/1 "Mochiy Pop One", Gaegu, sans-serif;
+  white-space: nowrap;
+}
+
+.again {
+  min-height: 48px;
+  padding: 6px 20px;
+  background: var(--red);
+  color: var(--cream);
+  border: 3px solid var(--ink);
+  border-radius: 14px;
+  box-shadow: 0 5px 0 var(--red2);
+  font-size: 22px;
+  cursor: pointer;
+}
+
+.again:active {
+  transform: translateY(4px);
+  box-shadow: 0 1px 0 var(--red2);
+}
+
+@keyframes bob {
+  50% { transform: translateY(-4px) rotate(-2deg); }
+}
+
+@keyframes floaty {
+  50% { transform: translateY(-12px) rotate(7deg); }
+}
+
+@keyframes blink {
+  0%, 94%, 100% { transform: scaleY(1); }
+  97% { transform: scaleY(.1); }
+}
+
+@keyframes wob {
+  30% { transform: rotate(-4deg); }
+  70% { transform: rotate(3deg); }
+}
+
+@keyframes smash {
+  to { transform: translateY(40px) scale(1.2); opacity: 0; }
+}
+
+@keyframes fly {
+  to { transform: translate(var(--dx), -70vh) rotate(var(--dr)); opacity: .2; }
+}
+
+@keyframes wave {
+  to { transform: translateX(-50%); }
+}
+
+@keyframes drop {
+  0% { transform: translate(0, 0) rotate(-45deg) scale(.4); }
+  35% { transform: translate(calc(var(--dx) * .6), var(--up)) rotate(-45deg) scale(1); }
+  100% { transform: translate(var(--dx), 150px) rotate(-45deg) scale(.8); opacity: 0; }
+}
+
+@keyframes shake {
+  25% { transform: translate(-5px, 2px); }
+  50% { transform: translate(4px, -3px); }
+  75% { transform: translate(-3px, -1px); }
+}
+
+@media (max-width: 600px) {
+  .bottle {
+    height: clamp(96px, 20vh, 150px);
+  }
+
+  .meta {
+    font-size: 16px;
+  }
+}
+
+/* shaking and flying pancakes get annoying fast for some people */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

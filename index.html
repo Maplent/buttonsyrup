@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <title>Button Syrup</title>
+
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Gaegu:wght@700&display=swap">
+        <link rel="stylesheet" href="css/style.css">
+
+        <script src="js/sound.js" defer></script>
+        <script src="js/game.js" defer></script>
+    </head>
+
+    <body>
+        <header class="top">
+            <h1>Button Syrup</h1>
+            <div class="meta">
+                <span id="stageNo"> Stage 1 of 10</span>
+                <span id="pressCount">0 presses</span>
+                <button class="mute" type="button" aria-pressed="false">Sound: on</button>
+            </div>
+        </header>
+
+        <main class="stage" id="stage">
+            <div class="counter"></div>
+
+            <div class="bottle" id="bottle">
+                <svg viewBox="0 0 120 170" aria-hidden="true">
+                    <!-- jug handle, neck, cap -->
+                    <circle cx="84" cy="38" r="10" fill="none" class="o" stroke-width="6"/>
+                    <rect x="49" y="18" width="22" height="28" rx="3" class="o fill-syrup" stroke-width="3.5"/>
+                    <rect x="45" y="6" width="30" height="16" rx="5" class="o fill-pink" stroke-width="3.5"/>
+
+                    <path class="o fill-syrup" stroke-width="3.5" d="M24 62 Q24 44 44 42 L76 42 Q96 44 96 62 L97 148 Q97 164 81 164 L39 164 Q23 164 23 148 Z"/>
+                    <path class="fill-syrup-dark" d="M84 46 Q93 50 93 62 L94 148 Q94 160 81 161 L72 161 Q86 152 86 124 L86 62 Q86 52 84 46Z"/>
+                    <rect x="31" y="54" width="7" height="42" rx="3.5" class="fill-syrup-light"/>
+
+                    <rect x="30" y="106" width="60" height="40" rx="6" class="o fill-cream" stroke-width="3"/>
+                    <text x="60" y="124" class="label-big">maple</text>
+                    <text x="60" y="139" class="label-small">so sweet ♡</text>
+
+                    <ellipse cx="35" cy="88" rx="6.5" ry="3.5" class="blush"/>
+                    <ellipse cx="85" cy="88" rx="6.5" ry="3.5" class="blush"/>
+
+                    <!-- 3 set eyes, bottle mood... AGHHHH HTML/CSS :SOB: -->
+                    <g class="eyes-normal">
+                        <g class="blink">
+                            <ellipse cx="46" cy="76" rx="6" ry="7.5" class="fill-ink"/>
+                            <ellipse cx="74" cy="76" rx="6" ry="7.5" class="fill-ink"/>
+                            <circle cx="48" cy="73" r="2.4" class="fill-white"/>
+                            <circle cx="76" cy="73" r="2.4" class="fill-white"/>
+                            <circle cx="44.5" cy="79" r="1.2" class="fill-white"/>
+                            <circle cx="72.5" cy="79" r="1.2" class="fill-white"/>
+                        </g>
+                    </g>
+                    
+                    <g class="eyes-squint o" fill="none" stroke-width="3.5">
+                        <path d="M40 70 L50 76 L40 82"/>
+                        <path d="M80 70 L70 76 L80 82"/>
+                    </g>
+
+                    <g class="eyes-happy o" fill="none" stroke-width="3.5">
+                        <path d="M40 79 Q46 70 52 79"/>
+                        <path d="M68 79 Q74 70 80 79"/>
+                    </g>
+
+                    <!-- gamejs swaps these paths to change face -->
+                    <path id="browL" class="o" stroke-width="3" fill="none"/>
+                    <path id="browR" class="o" stroke-width="3" fill="none"/>
+                    <path id="mouth" class="o" stroke-width="3"/>
+                </svg>
+            </div>
+
+            <div class="bubble"><p id="line" aria-hidden="true"></p></div>
+            <p class="sr" id="srLine" aria-live="polite"></p>
+
+            <div class="spot" id="spot">
+                <div class="ring"></div>
+                <button class="big" id="btn" type="button" aria-label="The button. Please don't press it... :3"><span class="cap"></span></button>
+                <span class="badge" id="badge" aria-hidden="true"></span>
+            </div>
+            <div id="extras"></div>
+
+            <div class="syrup" aria-hidden="true">
+                <svg viewBox="0 0 2400 20" preserveAspectRatio="none">
+                    <path id="waveFill" class="fill-syrup"/>
+                    <path id="waveLine" class="o" fill="none" stroke-width="3.5" vector-effect="non-scaling-stroke"/>
+                </svg>
+                <div class="body"><span class="glint"></span></div>
+            </div>
+
+            <div class="end" id="end" hidden>
+                <div class="card" role="dialog" aria-labelledby="endTitle">
+                    <h2 id="endTitle"></h2>
+                    <p id="endText"></p>
+                    <dl class="stats" id="endStats"></dl>
+                    <button class="again" id="again" type="button">Clean up and play again</button>
+                </div>
+            </div>
+        </main>
+    </body>
+</html>
