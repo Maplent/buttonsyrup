@@ -82,6 +82,7 @@ function burst(kind, n, el = btn) {
         d.style.top = y + 'px';
         d.style.setProperty('--dx', Math.round(Math.random() * 180 - 90) + 'px');
         d.style.setProperty('--up', Math.round(-40 - Math.random() * 70) + 'px');
+        d.style.setProperty('--spin', Math.round(Math.random() * 720 - 360) + 'deg');
         stage.append(d);
         setTimeout(() => d.remove(), 900);
     }
@@ -156,23 +157,59 @@ function addDome() {
     d.className = 'dome';
     d.type = 'button';
     d.setAttribute('aria-label', 'Glass cake dome over the button. Tap it to crack it.');
-    d.innerHTML = '<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg>';
+    d.innerHTML = '<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"></svg><span class="rim"></span>';
     spot.append(d);
     btn.disabled = true;
-    d.addEventListener('click', () => hitDome(d));
+    d.addEventListener('click', e => hitDome(d, e));
 }
 
-function hitDome(d) {
+// cracks spread out from wherever u tapped, and get bigger every hit
+function crackAt(x, y) {
+  let out = '';
+  const rays = 4 + Math.floor(Math.random() * 2);
+  for (let i = 0; i < rays; i++) {
+    let a = i / rays * Math.PI * 2 + Math.random() * .6;
+    let px = x, py = y;
+    let path = `M${x.toFixed(1)} ${y.toFixed(1)}`;
+    const len = (8 + Math.random() * 8) * (1 + S.hits * .35);
+    for (let s = 0; s < 3; s++) {
+      a += (Math.random() - .5) * .7;
+      px += Math.cos(a) * len / 3;
+      py += Math.sin(a) * len / 3;
+      path += ` L${px.toFixed(1)} ${py.toFixed(1)}`;
+    }
+    out += `<path class="shine" d="${path}"/><path d="${path}"/>`;
+  }
+  return out;
+}
+
+function tink(d, x, y) {
+  if (reduce) return;
+  const t = document.createElement('span');
+  t.className = 'tink';
+  t.style.left = x + '%';
+  t.style.top = y + '%';
+  d.append(t);
+  setTimeout(() => t.remove(), 400);
+}
+
+function hitDome(d, e) {
     S.lastAct = Date.now();
     S.hits++;
-    if (S.hits <= CRACKS.length) {
-        d.querySelector('svg').insertAdjacentHTML('beforeend', `<path d="${CRACKS[S.hits - 1]}"/>`);
-        sfx.clink(); buzz(10);
+    const r = d.getBoundingClientRect();
+    const clamp = n => Math.min(95, Math.max(5, n));
+    // keyboard clicks dont have a mouse spot so just pick somewhere :P
+    const x = e.detail ? clamp((e.clientX - r.left) / r.width * 100) : 30 + Math.random() * 40;
+    const y = e.detail ? clamp((e.clientY - r.top) / r.height * 100) : 25 + Math.random() * 40;
+    if (S.hits < 5) {
+        d.querySelector('svg').insertAdjacentHTML('beforeend', crackAt(x, y));
+        tink(d, x, y);
+        sfx.clink(S.hits); buzz(10);
         d.classList.remove('hit'); void d.offsetWidth; d.classList.add('hit');
         say(DOME[S.hits - 1], S.hits > 2 ? 'panic' : 'pout');
         return;
     }
-    sfx.smash(); burst('shard', 10, d); shake(); buzz(40);
+    sfx.smash(); burst('shard', 16, d); shake(); buzz(40);
     d.classList.add('smash');
     d.disabled = true;
     setTimeout(() => d.remove(), 500);

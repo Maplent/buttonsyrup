@@ -87,9 +87,11 @@ const sfx = {
         tone(1500, 800, .1, 'triangle', .12, .08);
     },
 
-    clink() {
-        tone(2400, 2100, .18, 'sine', .12);
-        tone(3300, 3000, .12, 'sine', .06);
+    clink(n = 1) {
+        // higher every tap so it sounds like its about to break aaa
+        const k = 1 + n * .08;
+        tone(2400 * k, 2100 * k, .18, 'sine', .12);
+        tone(3300 * k, 3000 * k, .12, 'sine', .06);
     },
 
     smash() {

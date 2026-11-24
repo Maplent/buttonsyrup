@@ -284,6 +284,11 @@ button {
   z-index: 3;
 }
 
+/* button looks a lil faded thru the glass */
+.spot:has(.dome:not(.smash)) .cap {
+  filter: saturate(.8) brightness(1.06);
+}
+
 .big {
   position: relative;
   display: block;
@@ -405,6 +410,7 @@ button {
   display: block;
 }
 
+/* glass that actually looks like glass now :DDD */
 .dome {
   position: absolute;
   left: -14%;
@@ -414,9 +420,11 @@ button {
   padding: 0;
   border: 3px solid var(--ink);
   border-radius: 50% 50% 10px 10px/80% 80% 10px 10px;
-  background: linear-gradient(100deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, .6) 28%, rgba(255, 255, 255, .2) 44%, rgba(255, 255, 255, .32));
+  background: linear-gradient(100deg, rgba(225, 242, 255, .2), rgba(255, 255, 255, .65) 26%, rgba(225, 242, 255, .22) 42%, rgba(205, 232, 255, .38));
+  box-shadow: inset -7px -5px 0 rgba(255, 255, 255, .4), inset 5px 0 0 rgba(150, 195, 230, .25);
   cursor: pointer;
   z-index: 2;
+  transform-origin: 50% 100%;
 }
 
 .dome::before {
@@ -432,6 +440,30 @@ button {
   border-radius: 12px 12px 4px 4px;
 }
 
+/* the shiny curve on the side */
+.dome::after {
+  content: "";
+  position: absolute;
+  left: 13%;
+  top: 12%;
+  width: 18%;
+  height: 48%;
+  border-left: 5px solid rgba(255, 255, 255, .9);
+  border-radius: 50% 0 0 50% / 60% 0 0 40%;
+  pointer-events: none;
+}
+
+.rim {
+  position: absolute;
+  left: -7%;
+  right: -7%;
+  bottom: -10px;
+  height: 13px;
+  background: rgba(235, 246, 255, .85);
+  border: 3px solid var(--ink);
+  border-radius: 8px;
+}
+
 .dome svg {
   position: absolute;
   inset: 0;
@@ -443,10 +475,15 @@ button {
 .dome path {
   fill: none;
   stroke: var(--ink);
-  stroke-width: 3;
+  stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
+}
+
+.dome path.shine {
+  stroke: rgba(255, 255, 255, .9);
+  stroke-width: 5;
 }
 
 .dome.hit {
@@ -456,6 +493,18 @@ button {
 .dome.smash {
   animation: smash .5s forwards;
   pointer-events: none;
+}
+
+/* little flash where u tapped */
+.tink {
+  position: absolute;
+  width: 34px;
+  height: 34px;
+  margin: -17px;
+  border: 3px solid #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: tink .4s ease-out forwards;
 }
 
 .stack {
@@ -568,10 +617,14 @@ button {
 }
 
 .shard {
-  width: 13px;
-  height: 13px;
-  background: #eef7ff;
+  width: 18px;
+  height: 16px;
+  margin: -8px;
+  border: 0;
+  background: linear-gradient(135deg, #fff, #cfe6f7);
   border-radius: 2px;
+  clip-path: polygon(50% 0, 100% 100%, 0 70%);
+  animation: shatter .9s cubic-bezier(.3, .1, .6, 1) forwards;
 }
 
 .shake {
@@ -665,12 +718,18 @@ button {
 }
 
 @keyframes wob {
-  30% { transform: rotate(-4deg); }
-  70% { transform: rotate(3deg); }
+  25% { transform: translateY(-4px) rotate(-3deg); }
+  50% { transform: translateY(0) rotate(2deg); }
+  75% { transform: translateY(-2px) rotate(-1deg); }
 }
 
 @keyframes smash {
   to { transform: translateY(40px) scale(1.2); opacity: 0; }
+}
+
+@keyframes shatter {
+  30% { transform: translate(calc(var(--dx) * .5), var(--up)) rotate(calc(var(--spin) * .3)); }
+  100% { transform: translate(var(--dx), 220px) rotate(var(--spin)); opacity: 0; }
 }
 
 @keyframes fly {
@@ -704,6 +763,11 @@ button {
 
 @keyframes fizz {
   to { transform: translateY(-160px); opacity: 0; }
+}
+
+@keyframes tink {
+  from { transform: scale(.2); opacity: 1; }
+  to { transform: scale(1.6); opacity: 0; }
 }
 
 @media (max-width: 600px) {
