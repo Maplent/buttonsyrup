@@ -23,10 +23,10 @@ const STAGES = [
     {id: 'intro', mood: 'calm', line: "hi hi! this is my button :3 please don't press it, okay?"},
     {id: 'again', mood: 'pout', line: "hey!! you pressed it >:( okay... just don't do it again"},
     {id: 'hop', mood: 'smug', line: "i taught it how to run away :P catch it if you can~"},
-    {id: 'dome', mood: 'smug', line: "i put it under the cake dome :3 it's super safe in there", setup: addDome},
+    {id: 'dome', mood: 'smug', line: "i put it under the cake dome :3 so don't go tapping on the glass >_>", setup: addDome},
     {id: 'tiny', mood: 'calm', line: "i made it teeny tiny :3 good luck finding it~", setup: () => place('62%', null, .38)},
     {id: 'decoy', mood: 'smug', line: "only one of these is the real one :D the other two are pretend", setup: addDecoys},
-    {id: 'stack', mood: 'happy', line: "pancake time! :D i stacked them right on top of the button~", setup: addStack},
+      {id: 'stack', mood: 'happy', line: "pancake time! :D they're right on top of the button, so no knocking them off~", setup: addStack},
     {id: 'hold', mood: 'panic', line: "new rule: you have to hold it down for a looong time. nobody's that patient :3"},
     {id: 'dare', mood: 'smug', line: "okay fine. press it 15 times. bet you can't :P", setup: () => { S.left = 15; $('#badge').textContent = 15; }},
     {id: 'last', mood: 'panic', line: "this is the last one. if you press it, the whole diner floods. please please please >_<", setup: () => place('60%', null, 1.3)}
@@ -289,10 +289,10 @@ function clock(ms) {
 function showEnd(kind) {
     const time = clock(Date.now() - S.started);
     const flood = kind === 'flood';
-    $('#endTitle').textContent = flood ? 'You flooded the diner :D' : "You didn't press it :3";
+    $('#endTitle').textContent = flood ? 'you flooded the diner :D' : "you didn't press it :3";
     $('#endText').textContent = flood
-        ? "Everything is sticky now, but the bottle seems pretty happy floating around."
-        : "Nobody has ever done that before. The bottle is really proud of you.";
+        ? "everything's sticky now, but the bottle seems pretty happy floating around~"
+        : "nobody's ever done that before... the bottle is so proud of you ;-;";
     const stats = flood
         ? [['Presses', S.presses], ['Time', time], ['Stages', '10 of 10']]
         : [['Presses', 0], ['Waited', time]];
